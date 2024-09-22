@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BFHL Frontend</title>
+</head>
+<body>
+    <h1>BFHL API Frontend</h1>
+    <form id="jsonForm">
+        <label for="jsonInput">Enter JSON:</label><br>
+        <textarea id="jsonInput" name="jsonInput" rows="10" cols="50" placeholder='Enter JSON e.g. {"data": ["A","1"]}'></textarea><br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>Response</h2>
+    <pre id="responseOutput"></pre>
+
+    <script>
+        document.getElementById('jsonForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const jsonInput = document.getElementById('jsonInput').value;
+
+            try {
+                const response = await fetch('/bfhl', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ data: JSON.parse(jsonInput) })
+                });
+                const result = await response.json();
+                document.getElementById('responseOutput').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('responseOutput').textContent = 'Error: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
